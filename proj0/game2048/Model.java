@@ -116,28 +116,12 @@ public class Model extends Observable {
 
         board.setViewingPerspective(side);
 
-        /* for (int c = 0; c < board.size(); c++) {
-            for (int r = 0; r < board.size(); r++) {
-                Tile t = board.tile(c, r);
-                if (t != null) {
-                    board.move(c, 3, t);
-                    changed = true;
-                }
+        for (int c = 0; c < board.size(); c++) {
+            if (ColumnChanged(c)) {
+                changed = true;
             }
         }
-        */
 
-        for (int r = (board.size() - 1); r >= 0; r--) {
-            for (int c = 0; c < board.size(); c++) {
-                Tile t = board.tile(c, r);
-                if (t != null) {
-                    Tile next_t = Next_t();
-                    if (IsSame(t, next_t)) {
-                        
-                    }
-                }
-            }
-        }
         board.setViewingPerspective(Side.NORTH);
 
         checkGameOver();
@@ -145,6 +129,30 @@ public class Model extends Observable {
             setChanged();
         }
         return changed;
+    }
+
+    /** Check if the column changed.
+     */
+    private boolean ColumnChanged(int c) {
+        boolean[] Merged = new boolean[board.size()];
+        for (int r = board.size() - 1; r >= 0; r--) {
+            Tile t = board.tile(c, r);
+            if (t != null) {
+                int target_r = r;
+                for (int r2 = r + 1; r < board.size(); r++) {
+                    Tile cur_t = board.tile(c, r2);
+                    if (cur_t == null) {
+                        target_r = r2;
+                    } else if (t.value() = cur_t.value()) {
+
+                    } else {
+                        // 当前的下面一行
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     /** Checks if the game is over and sets the gameOver variable
