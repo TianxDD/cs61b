@@ -133,25 +133,36 @@ public class Model extends Observable {
 
     /** Check if the column changed.
      */
-    private boolean ColumnChanged(int c) {
+    public boolean ColumnChanged(int c) {
         boolean[] Merged = new boolean[board.size()];
+        boolean Ischanged = false;
         for (int r = board.size() - 1; r >= 0; r--) {
             Tile t = board.tile(c, r);
             if (t != null) {
                 int target_r = r;
-                for (int r2 = r + 1; r < board.size(); r++) {
+                for (int r2 = r + 1; r2 < board.size(); r2++) {
                     Tile cur_t = board.tile(c, r2);
                     if (cur_t == null) {
                         target_r = r2;
-                    } else if (t.value() = cur_t.value()) {
-
+                    } else if (t.value() == cur_t.value() && !Merged[r2]) {
+                        target_r = r2;
+                        Merged[target_r] = true;
+                        score += (t.value() + cur_t.value());
+                        break;
                     } else {
-                        // 当前的下面一行
+                        target_r = r2 - 1;
+                        break;
                     }
+                }
+                if (target_r != r) {
+                    board.move(c, target_r, t);
+                    Ischanged = true;
                 }
             }
         }
-
+        if (Ischanged) {
+            return true;
+        }
         return false;
     }
 
